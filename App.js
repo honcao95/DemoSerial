@@ -21,7 +21,7 @@ class App extends Component {
       usbAttached: false,
       output: "",
       outputArray: [],
-      baudRate: "9600",
+      baudRate: "115200",
       interface: "-1",
       sendText: "HELLO",
       returnedDataType: definitions.RETURNED_DATA_TYPES.HEXSTRING
@@ -29,6 +29,7 @@ class App extends Component {
 
     this.startUsbListener = this.startUsbListener.bind(this);
     this.stopUsbListener = this.stopUsbListener.bind(this);
+    this.handleSendButton = this.handleSendButton.bind(this)
   }
 
   componentDidMount() {
@@ -156,12 +157,7 @@ class App extends Component {
   };
 
   handleSendButton = () => {
-    try {
-      RNSerialport.writeString("HELLO");
-      Alert.alert("Send ok");
-    } catch (error) {
-      Alert.alert(error)
-    }
+    RNSerialport.writeHexString("0203030505");
   }
 
   render() {
