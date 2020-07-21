@@ -10,6 +10,7 @@ import {
   DeviceEventEmitter
 } from "react-native";
 import { RNSerialport, definitions, actions } from "react-native-serialport";
+import { Buffer } from "buffer"
 //type Props = {};
 class App extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class App extends Component {
       usbAttached: false,
       output: "",
       outputArray: [],
-      baudRate: "115200",
+      baudRate: "9600",
       interface: "-1",
       sendText: "HELLO",
       returnedDataType: definitions.RETURNED_DATA_TYPES.HEXSTRING
@@ -112,17 +113,20 @@ class App extends Component {
     this.setState({ connected: false });
   }
   onReadData(data) {
-    if (
-      this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.INTARRAY
-    ) {
-      const payload = RNSerialport.intArrayToUtf16(data.payload);
-      this.setState({ output: this.state.output + payload });
-    } else if (
-      this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.HEXSTRING
-    ) {
-      const payload = RNSerialport.hexToUtf16(data.payload);
-      this.setState({ output: this.state.output + payload });
-    }
+    console.log('data', data)
+    this.setState({ output: this.state.output + data.payload });
+    // if (
+    //   this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.INTARRAY
+    // ) {
+    //   const payload = RNSerialport.intArrayToUtf16(data.payload);
+    //   // console.log(payload);
+    //   this.setState({ output: this.state.output + payload });
+    // } else if (
+    //   this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.HEXSTRING
+    // ) {
+    //   const payload = RNSerialport.hexToUtf16(data.payload);
+    //   this.setState({ output: this.state.output + payload });
+    // }
   }
 
   onError(error) {
@@ -157,7 +161,7 @@ class App extends Component {
   };
 
   handleSendButton = () => {
-    RNSerialport.writeHexString("0203030505");
+    RNSerialport.writeCmdId()
   }
 
   render() {
